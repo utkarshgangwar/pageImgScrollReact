@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const leftImages = [
   "https://picsum.photos/id/1011/1000/1000",
@@ -20,8 +20,15 @@ export function Welcome() {
   const leftRef = useRef<HTMLDivElement | null>(null);
   const rightRef = useRef<HTMLDivElement | null>(null);
   const scrollIndexRef = useRef(0);
-
   const maxIndex = leftImages.length - 1;
+
+  // ✅ Scroll left section to bottom on mount (now it scrolls upward)
+  useEffect(() => {
+    if (leftRef.current) {
+      const totalHeight = leftImages.length * window.innerHeight;
+      leftRef.current.scrollTop = totalHeight - window.innerHeight;
+    }
+  }, []);
 
   const handleScroll = (e: React.WheelEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -30,14 +37,17 @@ export function Welcome() {
     scrollIndexRef.current += direction;
     scrollIndexRef.current = Math.max(0, Math.min(scrollIndexRef.current, maxIndex));
 
-    const top = scrollIndexRef.current * window.innerHeight;
-    const reverseTop = (maxIndex - scrollIndexRef.current) * window.innerHeight;
+    // ⬅️ Left goes up (reverse)
+    const leftTop = (maxIndex - scrollIndexRef.current) * window.innerHeight;
+
+    // ➡️ Right goes down (normal)
+    const rightTop = scrollIndexRef.current * window.innerHeight;
 
     if (leftRef.current) {
-      leftRef.current.scrollTo({ top, behavior: "smooth" });
+      leftRef.current.scrollTo({ top: leftTop, behavior: "smooth" });
     }
     if (rightRef.current) {
-      rightRef.current.scrollTo({ top: reverseTop, behavior: "smooth" });
+      rightRef.current.scrollTo({ top: rightTop, behavior: "smooth" });
     }
   };
 
