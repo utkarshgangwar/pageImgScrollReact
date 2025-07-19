@@ -13,3 +13,29 @@ body {
     color-scheme: dark;
   }
 }
+
+.scroll-wrapper {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.scroll-half {
+  width: 50%;
+  height: 100vh;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scroll-half::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-half img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+}
