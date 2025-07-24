@@ -21,7 +21,8 @@ export function Welcome() {
   const rightRef = useRef<HTMLDivElement | null>(null);
   const scrollIndexRef = useRef(0);
   const maxIndex = leftImages.length - 1;
-
+  const isScrolling = useRef(false);
+  
   // ✅ Scroll left section to bottom on mount (now it scrolls upward)
   useEffect(() => {
     if (leftRef.current) {
@@ -33,14 +34,18 @@ export function Welcome() {
   const handleScroll = (e: React.WheelEvent<HTMLDivElement>) => {
     e.preventDefault();
 
+    if (isScrolling.current) return;
+
+    isScrolling.current = true;
+
     const direction = e.deltaY > 0 ? 1 : -1;
     scrollIndexRef.current += direction;
-    scrollIndexRef.current = Math.max(0, Math.min(scrollIndexRef.current, maxIndex));
+    scrollIndexRef.current = Math.max(
+      0,
+      Math.min(scrollIndexRef.current, maxIndex)
+    );
 
-    // ⬅️ Left goes up (reverse)
     const leftTop = (maxIndex - scrollIndexRef.current) * window.innerHeight;
-
-    // ➡️ Right goes down (normal)
     const rightTop = scrollIndexRef.current * window.innerHeight;
 
     if (leftRef.current) {
@@ -49,6 +54,11 @@ export function Welcome() {
     if (rightRef.current) {
       rightRef.current.scrollTo({ top: rightTop, behavior: "smooth" });
     }
+
+    // 👇 Unlock after animation
+    setTimeout(() => {
+      isScrolling.current = false;
+    }, 600); // adjust this delay if needed
   };
 
   return (
