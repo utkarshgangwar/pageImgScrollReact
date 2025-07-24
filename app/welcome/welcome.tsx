@@ -22,7 +22,7 @@ export function Welcome() {
   const scrollIndexRef = useRef(0);
   const maxIndex = leftImages.length - 1;
   const isScrolling = useRef(false);
-  
+
   // ✅ Scroll left section to bottom on mount (now it scrolls upward)
   useEffect(() => {
     if (leftRef.current) {
@@ -58,7 +58,7 @@ export function Welcome() {
     // 👇 Unlock after animation
     setTimeout(() => {
       isScrolling.current = false;
-    }, 600); // adjust this delay if needed
+    }, 1100); // adjust this delay if needed
   };
 
   return (
